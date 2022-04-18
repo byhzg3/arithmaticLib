@@ -12,6 +12,13 @@ package 买卖股票的最佳时机;
  */
 public class n122 {
     public int maxProfit(int[] prices) {
-        return 0;
+        int profit=0, min  = prices[0];
+        for (int i =1;i<prices.length;i++){
+            if (min<prices[i]){
+                profit+=prices[i]-min;
+            }
+            min=prices[i];
+        }
+        return profit;
     }
 }
