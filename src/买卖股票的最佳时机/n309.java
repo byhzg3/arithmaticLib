@@ -1,44 +1,29 @@
 package 买卖股票的最佳时机;
 
 /**
- * 给定一个数组 prices ，其中prices[i] 表示股票第 i 天的价格。
- *
- * 在每一天，你可能会决定购买和/或出售股票。你在任何时候最多只能持有 一股 股票。你也可以购买它，然后在 同一天 出售。
- * 返回 你能获得的 最大 利润。
- *
+ 给定一个整数数组prices，其中prices[i]表示第i天的股票价格 。
+
+ 设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:
+
+ 卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。
+ 注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+
  */
 public class n309 {
     public static void main(String[] args) {
         System.out.println(new n309().maxProfit(new int[]{1, 2,3,0,2}));
     }
+
     public int maxProfit(int[] prices) {
-        /*
-        买入 卖出 冷冻期 买入 卖出
-         */
-        int sum = 0;
-        boolean freeze = false;
-        int[] deal = new int[4];
-        deal[0]=-prices[0];
-        deal[2]=-prices[0];
-        for (int i =1;i<prices.length;i++){
-            if (freeze){
-                deal[0]=-prices[i];
-                deal[2]=-prices[0];
-                freeze=false;
-                continue;
-            }
-            //解冻期
-            if (prices[i]<deal[3]){
-                sum+=deal[3];
-                freeze=true;
-                deal=new int[4];
-            }else{
-                deal[0]= Math.max(deal[0],-prices[i]);
-                deal[1]= Math.max(deal[1],prices[i]+deal[0]);
-                deal[2]= Math.max(deal[2],deal[1]-prices[i]);
-                deal[3]= Math.max(deal[3],deal[2]+prices[i]);
-            }
+        int[][] profitMatrix = new int[prices.length][2];
+        int freezeProfit = 0;
+        profitMatrix[0][0] = -prices[0]; //持股状态最大收益
+        profitMatrix[0][1] = 0; //无持股最大收益
+        for (int i = 1; i < prices.length; i++) {
+            profitMatrix[i][0] = Math.max(freezeProfit - prices[i], profitMatrix[i - 1][0]);
+            profitMatrix[i][1] = Math.max(profitMatrix[i - 1][0] + prices[i], profitMatrix[i - 1][1]);
+            freezeProfit = profitMatrix[i - 1][1];
         }
-        return sum+deal[3];
+        return profitMatrix[prices.length - 1][1];
     }
 }
