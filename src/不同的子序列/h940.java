@@ -12,23 +12,20 @@ import java.util.Map;
  *
  */
 public class h940 {
-    public static void main(String[] args) {
-        System.out.println();
-    }
-    public int distinctSubseqII(String s) {
+    public static int distinctSubseqII(String s) {
         Map<Character,Integer>  map =  new HashMap<>();
-        int count = 0,mod = 1000000007,tmp;
+        int count = 0,mod = 1000000007;
         for (int i =0 ;i < s.length();i++){
-            tmp = count+1;
-            if (map.containsKey(s.charAt(i))){
-                tmp = tmp - map.get(s.charAt(i));
-                if (tmp<=0){
-                    tmp+=mod;
-                }
+            Character ch = s.charAt(i);
+            boolean firstTime = map.get(ch)==null;
+            Integer last = map.get(ch);
+            map.put(ch,count);
+            if (!firstTime){
+                count = mod+(count+count)%mod-last;
+            }else{
+                count=(count+count+1);
             }
-            count= tmp+count;
-            count= count % mod;
-            map.put(s.charAt(i),(map.getOrDefault(s.charAt(i),0)+tmp)%mod);
+            count = count%mod;
         }
         return count;
     }
