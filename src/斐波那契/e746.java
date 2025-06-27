@@ -1,6 +1,6 @@
 package 斐波那契;
 
-public class n746 {
+public class e746 {
     public static void main(String[] args) {
         int[] a= new int[]{10,15,20};
         System.out.println(minCostClimbingStairs(a));
